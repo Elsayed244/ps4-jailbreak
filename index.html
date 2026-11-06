@@ -61,18 +61,25 @@
             align-items: center;
             margin-bottom: 25px;
             height: 90px;
+            position: relative;
         }
 
         /* تصميم القفل وجعله ينبض بهدوء */
         .lock-icon {
             width: 60px;
             height: 60px;
-            fill: fill;
-            fill-opacity: 0;
+            fill: none;
             stroke: #26e600;
             stroke-width: 2;
-            transition: all 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             animation: pulseGlow 2s infinite ease-in-out;
+        }
+
+        /* تصميم حركة فتح القفل */
+        .lock-icon.unlocked path {
+            transform: translateY(-4px) rotate(-15deg);
+            transform-origin: 17px 7px;
+            transition: transform 0.5s ease;
         }
 
         /* تصميم شعار الـ GoldHEN والظهور الخفي */
@@ -89,6 +96,27 @@
             opacity: 0;
             transform: scale(0.7);
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute;
+        }
+
+        /* تصميم عنصر شريط التحميل */
+        .progress-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(38, 230, 0, 0.2);
+            height: 8px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            display: none; /* يظهر فقط عند الضغط على الزر */
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #26e600, #39ff14);
+            box-shadow: 0 0 10px #26e600;
+            transition: width 0.1s linear;
         }
 
         /* شاشة عرض الحالات باللون الأخضر المريح */
@@ -132,6 +160,15 @@
             background: linear-gradient(135deg, #26e600 0%, #093a13 100%);
             color: #000000;
             border-color: #26e600;
+        }
+
+        .btn-exploit:disabled {
+            background: #111;
+            color: #444;
+            border-color: #222;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         /* الحقوق أسفل الصفحة */
@@ -178,12 +215,17 @@
             </svg>
             <div id="goldhen-text" class="goldhen-logo">GoldHEN</div>
         </div>
+
+        <!-- شريط التحميل الجديد -->
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
         
         <div id="firmware-status">
             [SYS_INF]: Detecting PS4 Firmware...
         </div>
         
-        <button class="btn-exploit" onclick="launchExploit()">
+        <button id="exploit-btn" class="btn-exploit" onclick="launchExploit()">
             INITIALIZE EXPLOIT | Launch HEN
         </button>
         
@@ -192,11 +234,11 @@
         </div>
     </div>
 
-    <!-- هنا تم تعديل الربط ليستدعي ملف الاختراق بالاسم jb.js الفعلي الخاص بك -->
+    <!-- استدعاء ملف الاختراق الخارجي الخاص بك -->
     <script type="module" src="jb.js"></script>
 
     <script>
-        // كود تشغيل شاشة الحالات التفاعلية الخضراء وحركة الأيقونات
+        // كود تشغيل شاشة الحالات التفاعلية الخضراء عند فتح الصفحة
         setTimeout(function() {
             var consoleLog = document.getElementById('firmware-status');
             if (consoleLog) {
@@ -208,43 +250,37 @@
             var consoleLog = document.getElementById('firmware-status');
             var lockSvg = document.getElementById('lock-svg');
             var goldhenText = document.getElementById('goldhen-text');
+            var progressContainer = document.getElementById('progress-container');
+            var progressBar = document.getElementById('progress-bar');
+            var exploitBtn = document.getElementById('exploit-btn');
+            
+            // تعطيل الزر وإظهار شريط التحميل
+            exploitBtn.disabled = true;
+            progressContainer.style.display = 'block';
             
             if (consoleLog) {
                 consoleLog.innerHTML = "[!] INIT: WebKit Exploit Armed...\n[#] RUNNING: Memory Primitive Leak...";
             }
             
-            setTimeout(function() {
-                if (consoleLog) {
-                    consoleLog.innerHTML += "\n[OK]: Module Bases 0x4000 Aligned.\n[*] INJECTING: Pthread Payload Blob...";
-                }
-                if (lockSvg) {
-                    lockSvg.style.transform = "rotate(-15deg) translateY(-5px)";
-                    lockSvg.style.stroke = "#ffd700";
-                }
-            }, 1200);
-
-            setTimeout(function() {
-                if (consoleLog) {
-                    consoleLog.innerHTML += "\n[!] ROOT: Jailbreak Done Escape=1\n[SUCCESS]: HEN Loaded Successfully!";
-                }
-                
-                if (lockSvg) {
-                    lockSvg.style.opacity = "0";
-                    lockSvg.style.transform = "scale(0.5) rotate(45deg)";
-                }
-                
-                setTimeout(function() {
-                    if (lockSvg) lockSvg.style.display = "none";
-                    if (goldhenText) {
-                        goldhenText.style.display = "block";
-                        setTimeout(function() {
-                            goldhenText.style.opacity = "1";
-                            goldhenText.style.transform = "scale(1)";
-                        }, 50);
+            let width = 0;
+            // عداد وهمي لمحاكاة التحميل والخطوات بالتوازي
+            let interval = setInterval(function() {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    triggerSuccess();
+                } else {
+                    width += 2; // سرعة التحميل
+                    progressBar.style.width = width + '%';
+                    
+                    // تحديث النصوص البرمجية بناءً على نسبة التحميل لتعطي واقعية أكبر
+                    if (width === 40 && consoleLog) {
+                        consoleLog.innerHTML += "\n[OK]: Module Bases 0x4000 Aligned.";
                     }
-                }, 400);
-            }, 2800);
-        }
-    </script>
-</body>
-</html>
+                    if (width === 70 && consoleLog) {
+                        consoleLog.innerHTML += "\n[*] INJECTING: Pthread Payload Blob...";
+                    }
+                }
+            }, 70); // يستغرق التحميل حوالي 3.5 ثانية بالكامل
+
+            function triggerSuccess() {
+                if (consoleLog) {
