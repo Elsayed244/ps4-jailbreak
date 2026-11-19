@@ -186,6 +186,47 @@
             color: #26e600;
         }
 
+        /* تصميم الإشعار الجانبي (Side Notification) */
+        .side-toast {
+            position: fixed;
+            top: 25px;
+            right: -350px;
+            background: rgba(25, 4, 4, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid #ff2a2a;
+            border-left: 5px solid #ff2a2a;
+            color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(255, 42, 42, 0.35);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: left;
+            direction: ltr;
+            z-index: 9999;
+            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 280px;
+        }
+
+        .side-toast.show {
+            right: 25px;
+        }
+
+        .side-toast-title {
+            color: #ff3b3b;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .side-toast-msg {
+            color: #e0e0e0;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
         @keyframes fluidGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -216,6 +257,12 @@
 </head>
 <body>
 
+    <!-- الإشعار الجانبي -->
+    <div id="side-toast" class="side-toast">
+        <div class="side-toast-title">⚠️ Device Not Supported</div>
+        <div class="side-toast-msg" id="toast-desc">This system is not compatible with the exploit.</div>
+    </div>
+
     <div class="main-container">
         <h1>ps4 jailbreak</h1>
         <div class="subtitle">نظام استضافة ثغرات الجيلبريك المستقر</div>
@@ -232,7 +279,7 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
         
-        <div id="out">[SYS_INF]: Detecting PS4 Firmware...</div>
+        <div id="out">[SYS_INF]: Detecting Device & Firmware...</div>
         
         <button id="exploit-btn" class="btn-exploit">
             INITIALIZE EXPLOIT | Launch HEN
@@ -244,13 +291,7 @@
     </div>
 
     <script>
-        setTimeout(function() {
-            var consoleLog = document.getElementById('out');
-            if (consoleLog && consoleLog.textContent.includes("Detecting")) {
-                consoleLog.innerHTML = "[FW-STATUS]: PS4 System 13.52 - READY TO LAUNCH\n";
-            }
-        }, 1000);
-
+        // دالة طباعة الرسائل داخل صندوق السجلات
         function logMessage(msg, type = '') {
             const out = document.getElementById('out');
             const span = document.createElement('span');
@@ -260,35 +301,7 @@
             out.scrollTop = out.scrollHeight;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const btn = document.getElementById('exploit-btn');
-            
-            btn.addEventListener('click', async function() {
-                const progressContainer = document.getElementById('progress-container');
-                const progressBar = document.getElementById('progress-bar');
-                const lockSvg = document.getElementById('lock-svg');
-                const goldhenText = document.getElementById('goldhen-text');
-
-                const targetFile = './jb.js';
-
-                btn.disabled = true;
-                lockSvg.classList.remove('failed');
-                progressBar.style.background = 'linear-gradient(90deg, #26e600, #39ff14)';
-                progressContainer.style.display = 'block';
-                progressBar.style.width = '30%';
-                logMessage(`[SEARCH]: Looking for "${targetFile}"...`, 'warn');
-
-                try {
-                    const response = await fetch(targetFile, { method: 'HEAD' });
-                    progressBar.style.width = '65%';
-
-                    if (!response.ok) {
-                        throw new Error(`File "${targetFile}" not found (HTTP ${response.status})`);
-                    }
-
-                    logMessage(`[SUCCESS]: Found "${targetFile}". Loading module...`, 'ok');
-
-                    const script = document.createElement('script');
-                    script.type = 'module';
-                    script.src = targetFile;
-
+        // دالة إظهار الإشعار الجانبي
+        function showSideNotification(title, description) {
+            const toast = document.getElementById('side-toast');
+            toast.querySelector('.side-toast-title').textContent = title;
