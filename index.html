@@ -234,7 +234,7 @@
         
         <div id="out">[SYS_INF]: Detecting PS4 Firmware...</div>
         
-        <button id="exploit-btn" class="btn-exploit" onclick="launchExploit()">
+        <button id="exploit-btn" class="btn-exploit">
             INITIALIZE EXPLOIT | Launch HEN
         </button>
         
@@ -244,7 +244,6 @@
     </div>
 
     <script>
-        // 1. تحديث حالة النظام تلقائياً بعد ثانية من فتح الصفحة
         setTimeout(function() {
             var consoleLog = document.getElementById('out');
             if (consoleLog && consoleLog.textContent.includes("Detecting")) {
@@ -252,7 +251,6 @@
             }
         }, 1000);
 
-        // 2. دالة مساعدة لطباعة الرسائل داخل صندوق السجلات بالألوان
         function logMessage(msg, type = '') {
             const out = document.getElementById('out');
             const span = document.createElement('span');
@@ -262,31 +260,35 @@
             out.scrollTop = out.scrollHeight;
         }
 
-        // 3. الدالة الرئيسية التي تعمل عند الضغط على الزر
-        async function launchExploit() {
+        document.addEventListener('DOMContentLoaded', function() {
             const btn = document.getElementById('exploit-btn');
-            const progressContainer = document.getElementById('progress-container');
-            const progressBar = document.getElementById('progress-bar');
-            const lockSvg = document.getElementById('lock-svg');
-            const goldhenText = document.getElementById('goldhen-text');
+            
+            btn.addEventListener('click', async function() {
+                const progressContainer = document.getElementById('progress-container');
+                const progressBar = document.getElementById('progress-bar');
+                const lockSvg = document.getElementById('lock-svg');
+                const goldhenText = document.getElementById('goldhen-text');
 
-            // اسم الملف المطلوب البحث عنه وتشغيله
-            const targetFile = './jb.js';
+                const targetFile = './jb.js';
 
-            // تجهيز الواجهة وشريط التحميل
-            btn.disabled = true;
-            lockSvg.classList.remove('failed');
-            progressBar.style.background = 'linear-gradient(90deg, #26e600, #39ff14)';
-            progressContainer.style.display = 'block';
-            progressBar.style.width = '30%';
-            logMessage(`[SEARCH]: Looking for "${targetFile}"...`, 'warn');
+                btn.disabled = true;
+                lockSvg.classList.remove('failed');
+                progressBar.style.background = 'linear-gradient(90deg, #26e600, #39ff14)';
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '30%';
+                logMessage(`[SEARCH]: Looking for "${targetFile}"...`, 'warn');
 
-            try {
-                // البحث عن وجود الملف في نفس مجلد الموقع
-                const response = await fetch(targetFile, { method: 'HEAD' });
-                progressBar.style.width = '65%';
+                try {
+                    const response = await fetch(targetFile, { method: 'HEAD' });
+                    progressBar.style.width = '65%';
 
-                if (!response.ok) {
-                    throw new Error(`File "${targetFile}" not found (HTTP ${response.status})`);
-                }
+                    if (!response.ok) {
+                        throw new Error(`File "${targetFile}" not found (HTTP ${response.status})`);
+                    }
+
+                    logMessage(`[SUCCESS]: Found "${targetFile}". Loading module...`, 'ok');
+
+                    const script = document.createElement('script');
+                    script.type = 'module';
+                    script.src = targetFile;
 
