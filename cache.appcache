@@ -1,0 +1,9 @@
+CACHE MANIFEST
+# v1.0 - 2026
+
+CACHE:
+index.html
+jb.js
+
+NETWORK:
+*
