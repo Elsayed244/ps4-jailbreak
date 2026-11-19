@@ -1,307 +1,319 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ps4 jailbreak | Exploit Menu</title>
+<!doctype html>
+<html lang="ar" dir="rtl" manifest="cache.appcache">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PS4 Jailbreak | Host Menu</title>
     <style>
-        body {
-            background: linear-gradient(125deg, #020904, #051409, #02050e, #010402);
-            background-size: 400% 400%;
-            animation: fluidGradient 15s ease infinite;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        background: linear-gradient(125deg, #020904, #051409, #02050e, #010402);
+        background-size: 400% 400%;
+        animation: fluidGradient 15s ease infinite;
+        color: #c8ced8;
+        font: 15px/1.45 "Segoe UI", system-ui, sans-serif;
+        overflow: hidden;
+      }
 
-        .main-container {
-            background: rgba(1, 5, 2, 0.45);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(57, 255, 20, 0.08);
-            padding: 35px 25px;
-            border-radius: 28px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
-            width: 90%;
-            max-width: 480px;
-            animation: fadeIn 1.2s ease-in-out;
-        }
-        
-        h1 {
-            font-size: 34px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #39ff14 0%, #0d5c1d 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 5px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
+      @keyframes fluidGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
 
-        .subtitle {
-            color: #8cb991;
-            font-size: 14px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
+      /* الشريط العلوي */
+      #brand {
+        text-align: center;
+        padding: 14px 10px;
+        background: rgba(1, 5, 2, 0.7);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(57, 255, 20, 0.15);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      }
 
-        .status-visual-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            height: 90px;
-            position: relative;
-        }
+      #brand b {
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        background: linear-gradient(135deg, #39ff14 0%, #0d5c1d 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        vertical-align: middle;
+        text-transform: uppercase;
+      }
 
-        .lock-icon {
-            width: 60px;
-            height: 60px;
-            fill: none;
-            stroke: #26e600;
-            stroke-width: 2;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: pulseGlow 2s infinite ease-in-out;
-        }
+      /* حاوية زر التشغيل في المنتصف */
+      #start-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(1, 5, 2, 0.55);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(57, 255, 20, 0.15);
+        padding: 35px 25px;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85);
+        width: 85%;
+        max-width: 400px;
+        text-align: center;
+        z-index: 10;
+      }
 
-        .lock-icon.unlocked path {
-            transform: translateY(-4px) rotate(-15deg);
-            transform-origin: 17px 7px;
-            transition: transform 0.5s ease;
-        }
+      #start-box h2 {
+        margin: 0 0 8px;
+        font-size: 24px;
+        color: #39ff14;
+        letter-spacing: 1px;
+      }
 
-        .lock-icon.failed {
-            stroke: #ff2a2a !important;
-            animation: failShake 0.5s ease, pulseRed 1.5s infinite ease-in-out !important;
-        }
+      #start-box p {
+        margin: 0 0 22px;
+        font-size: 13px;
+        color: #8cb991;
+      }
 
-        .goldhen-logo {
-            display: none;
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            font-size: 44px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 50%, #b8860b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
-            opacity: 0;
-            transform: scale(0.7);
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: absolute;
-        }
+      .btn-exploit {
+        background: linear-gradient(135deg, #093a13 0%, #011405 100%);
+        color: #4fff30;
+        border: 1px solid rgba(79, 255, 48, 0.35);
+        padding: 16px 28px;
+        font-size: 15px;
+        font-weight: bold;
+        border-radius: 14px;
+        cursor: pointer;
+        width: 100%;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
 
-        .goldhen-logo.show {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
+      .btn-exploit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(57, 255, 20, 0.35);
+        background: linear-gradient(135deg, #26e600 0%, #093a13 100%);
+        color: #000000;
+        border-color: #26e600;
+      }
 
-        .progress-container {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(38, 230, 0, 0.2);
-            height: 8px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            display: none;
-        }
+      /* شريط حالة الكاش أوفلاين */
+      #cache-status {
+        margin-top: 15px;
+        font-size: 12px;
+        color: #ffd700;
+        min-height: 18px;
+      }
 
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #26e600, #39ff14);
-            box-shadow: 0 0 10px #26e600;
-            transition: width 0.3s ease;
-        }
+      /* دائرة التحميل (مخفية حتى الضغط على الزر) */
+      #spin {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 54px;
+        height: 54px;
+        margin: -27px 0 0 -27px;
+        border: 4px solid rgba(38, 230, 0, 0.15);
+        border-top-color: #39ff14;
+        border-radius: 50%;
+        box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+        animation: spin 0.9s linear infinite;
+      }
 
-        #out {
-            background: rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(13, 92, 29, 0.4);
-            color: #26e600;
-            padding: 15px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-family: 'Courier New', Courier, monospace;
-            margin-bottom: 25px;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
-            height: 110px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            text-align: left;
-            direction: ltr;
-            line-height: 1.5;
-        }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
 
-        .ok { color: #39ff14; font-weight: bold; }
-        .warn { color: #ffd700; }
-        .bad { color: #ff3b3b; font-weight: bold; }
+      /* رسالة النتيجة في المنتصف */
+      #msg {
+        position: fixed;
+        top: 50%;
+        left: 0;
+        right: 0;
+        transform: translateY(-50%);
+        text-align: center;
+        font-size: 20px;
+        letter-spacing: 1px;
+        display: none;
+        padding: 0 20px;
+      }
 
-        .btn-exploit {
-            background: linear-gradient(135deg, #093a13 0%, #011405 100%);
-            color: #4fff30;
-            border: 1px solid rgba(79, 255, 48, 0.3);
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 16px;
-            cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+      #wrap {
+        padding: 0;
+      }
 
-        .btn-exploit:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
-            background: linear-gradient(135deg, #26e600 0%, #093a13 100%);
-            color: #000000;
-            border-color: #26e600;
-        }
+      #state,
+      #out {
+        display: none;
+      }
 
-        .btn-exploit:disabled {
-            background: #111;
-            color: #555;
-            border-color: #222;
-            cursor: not-allowed;
-        }
+      /* حالات التشغيل التي يتحكم بها ملف jb.js */
+      body.running #spin {
+        display: block;
+      }
 
-        .footer-credits {
-            margin-top: 25px;
-            font-size: 11px;
-            color: #4b5e4d;
-        }
+      body.done #spin,
+      body.fail #spin {
+        display: none !important;
+      }
 
-        .footer-credits span {
-            color: #26e600;
-        }
+      body.fail #msg {
+        display: block;
+        color: #ff3b3b;
+        font-weight: 700;
+        text-shadow: 0 0 15px rgba(255, 59, 59, 0.4);
+      }
 
-        /* تصميم الإشعار الجانبي (Side Notification) */
-        .side-toast {
-            position: fixed;
-            top: 25px;
-            right: -350px;
-            background: rgba(25, 4, 4, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid #ff2a2a;
-            border-left: 5px solid #ff2a2a;
-            color: #ffffff;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(255, 42, 42, 0.35);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: left;
-            direction: ltr;
-            z-index: 9999;
-            transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 280px;
-        }
+      body.done #msg {
+        display: block;
+        color: #39ff14;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+      }
 
-        .side-toast.show {
-            right: 25px;
-        }
+      /* وضع عرض السجلات الكاملة عند إضافة ?log=1 للرابط */
+      body.log #start-box,
+      body.log #spin,
+      body.log #msg {
+        display: none !important;
+      }
 
-        .side-toast-title {
-            color: #ff3b3b;
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+      body.log #wrap {
+        padding: 18px 22px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-        .side-toast-msg {
-            color: #e0e0e0;
-            font-size: 12px;
-            line-height: 1.4;
-        }
+      body.log #state {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        color: #39ff14;
+        margin: 0 0 12px;
+        text-align: left;
+        direction: ltr;
+      }
 
-        @keyframes fluidGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+      body.log #out {
+        display: block;
+        white-space: pre-wrap;
+        font: 12px/1.5 Consolas, "Courier New", monospace;
+        background: rgba(0, 0, 0, 0.75);
+        border: 1px solid rgba(57, 255, 20, 0.25);
+        border-radius: 12px;
+        padding: 14px 16px;
+        height: calc(100vh - 155px);
+        overflow-y: auto;
+        text-align: left;
+        direction: ltr;
+        box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
+      }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.97); }
-            to { opacity: 1; transform: scale(1); }
-        }
+      .ok, .safe { color: #39ff14; font-weight: bold; }
+      .bad, .danger { color: #ff3b3b; font-weight: bold; }
+      .warn { color: #ffd700; }
+      code { color: #8cb991; }
 
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(57,255,20,0.2)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 12px rgba(57,255,20,0.5)); }
-        }
-
-        @keyframes pulseRed {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,42,42,0.4)); }
-            50% { transform: scale(1.06); filter: drop-shadow(0 0 15px rgba(255,42,42,0.8)); }
-        }
-
-        @keyframes failShake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
+      /* حقوق المطور */
+      .footer-credits {
+        position: fixed;
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 11px;
+        color: #4b5e4d;
+      }
+      .footer-credits span {
+        color: #26e600;
+      }
     </style>
-</head>
-<body>
-
-    <!-- الإشعار الجانبي -->
-    <div id="side-toast" class="side-toast">
-        <div class="side-toast-title">⚠️ Device Not Supported</div>
-        <div class="side-toast-msg" id="toast-desc">This system is not compatible with the exploit.</div>
+  </head>
+  <body>
+    <div id="brand">
+      <b>PS4 JAILBREAK | 13.52</b>
     </div>
 
-    <div class="main-container">
-        <h1>ps4 jailbreak</h1>
-        <div class="subtitle">نظام استضافة ثغرات الجيلبريك المستقر</div>
-        
-        <div class="status-visual-box">
-            <svg id="lock-svg" class="lock-icon" viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <div id="goldhen-text" class="goldhen-logo">GoldHEN</div>
-        </div>
+    <!-- صندوق زر التشغيل -->
+    <div id="start-box">
+      <h2>PS4 HOST MENU</h2>
+      <p>نظام استضافة ثغرات الجيلبريك المستقر</p>
+      <button id="launch-btn" class="btn-exploit">
+        INITIALIZE EXPLOIT | Launch HEN
+      </button>
+      <div id="cache-status"></div>
+    </div>
 
-        <div class="progress-container" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        
-        <div id="out">[SYS_INF]: Detecting Device & Firmware...</div>
-        
-        <button id="exploit-btn" class="btn-exploit">
-            INITIALIZE EXPLOIT | Launch HEN
-        </button>
-        
-        <div class="footer-credits">
-            تعديل الواجهة وتطوير الهوست بواسطة <span>المطور السيد جبارة</span> &copy; 2026
-        </div>
+    <!-- عناصر الحالة والسجلات الخاصة بملف jb.js -->
+    <div id="spin"></div>
+    <div id="msg"></div>
+
+    <div id="wrap">
+      <h2 id="state"></h2>
+      <div id="out"></div>
+    </div>
+
+    <div class="footer-credits">
+      تطوير وتعديل الواجهة بواسطة <span>المطور السيد جبارة</span> &copy; 2026
     </div>
 
     <script>
-        // دالة طباعة الرسائل داخل صندوق السجلات
-        function logMessage(msg, type = '') {
-            const out = document.getElementById('out');
-            const span = document.createElement('span');
-            if (type) span.className = type;
-            span.textContent = msg + '\n';
-            out.appendChild(span);
-            out.scrollTop = out.scrollHeight;
-        }
+      // 1. دالة بدء التشغيل عند الضغط على الزر
+      function startExploit() {
+        document.getElementById('start-box').style.display = 'none';
+        document.body.classList.add('running');
 
-        // دالة إظهار الإشعار الجانبي
-        function showSideNotification(title, description) {
-            const toast = document.getElementById('side-toast');
-            toast.querySelector('.side-toast-title').textContent = title;
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = './jb.js';
+        document.body.appendChild(script);
+      }
+
+      document.getElementById('launch-btn').addEventListener('click', startExploit);
+
+      // إذا تم فتح الرابط بوضع السجلات (?log=1) يتم التشغيل مباشرة لإظهار السجل
+      if (window.location.search.includes('log=1')) {
+        startExploit();
+      }
+
+      // 2. مراقبة حالة حفظ الموقع للعمل بدون إنترنت (Offline Cache)
+      if (window.applicationCache) {
+        const cacheStatus = document.getElementById('cache-status');
+
+        window.applicationCache.addEventListener('downloading', function() {
+          cacheStatus.textContent = 'جاري حفظ الملفات للعمل أوفلاين... 0%';
+        });
+
+        window.applicationCache.addEventListener('progress', function(e) {
+          if (e.lengthComputable) {
+            const percent = Math.round((e.loaded / e.total) * 100);
+            cacheStatus.style.color = '#ffd700';
+            cacheStatus.textContent = `جاري تثبيت الكاش أوفلاين... ${percent}%`;
+          }
+        });
+
+        window.applicationCache.addEventListener('cached', function() {
+          cacheStatus.style.color = '#39ff14';
+          cacheStatus.textContent = '✔ تم حفظ الموقع بنجاح! يمكنك الآن فصل الإنترنت.';
+        });
+
+        window.applicationCache.addEventListener('updateready', function() {
+          cacheStatus.style.color = '#39ff14';
+          cacheStatus.textContent = '✔ تم تحديث ملفات الكاش! أعد تحميل الصفحة.';
+        });
+
+        window.applicationCache.addEventListener('noupdate', function() {
+          cacheStatus.style.color = '#8cb991';
+          cacheStatus.textContent = '✔ الموقع جاهز للعمل بدون إنترنت (Offline Ready)';
+        });
+      }
+    </script>
+  </body>
+</html>
