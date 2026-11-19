@@ -243,9 +243,8 @@
         </div>
     </div>
 
-    <script type="module" src="./jb.js"></script>
-
     <script>
+        // 1. تحديث حالة النظام تلقائياً بعد ثانية من فتح الصفحة
         setTimeout(function() {
             var consoleLog = document.getElementById('out');
             if (consoleLog && consoleLog.textContent.includes("Detecting")) {
@@ -253,40 +252,41 @@
             }
         }, 1000);
 
-        window.updateExploitResult = function(isSuccess) {
-            const lockIcon = document.getElementById('lock-svg');
-            const goldhenLogo = document.getElementById('goldhen-text');
+        // 2. دالة مساعدة لطباعة الرسائل داخل صندوق السجلات بالألوان
+        function logMessage(msg, type = '') {
+            const out = document.getElementById('out');
+            const span = document.createElement('span');
+            if (type) span.className = type;
+            span.textContent = msg + '\n';
+            out.appendChild(span);
+            out.scrollTop = out.scrollHeight;
+        }
+
+        // 3. الدالة الرئيسية التي تعمل عند الضغط على الزر
+        async function launchExploit() {
+            const btn = document.getElementById('exploit-btn');
+            const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
-            const btn = document.getElementById('exploit-btn');
+            const lockSvg = document.getElementById('lock-svg');
+            const goldhenText = document.getElementById('goldhen-text');
 
-            if (isSuccess) {
-                progressBar.style.width = "100%";
-                lockIcon.classList.remove('failed');
-                lockIcon.classList.add('unlocked');
-                
-                setTimeout(() => {
-                    lockIcon.style.display = "none";
-                    goldhenLogo.classList.add('show');
-                    btn.textContent = "GOLDHEN ACTIVATED ✔";
-                }, 600);
-            } else {
-                progressBar.style.background = "#ff2a2a";
-                lockIcon.classList.remove('unlocked');
-                lockIcon.classList.add('failed');
-                btn.disabled = false;
-                btn.textContent = "FAILED - RETRY EXPLOIT";
-            }
-        };
+            // اسم الملف المطلوب البحث عنه وتشغيله
+            const targetFile = './jb.js';
 
-        function launchExploit() {
-            const btn = document.getElementById('exploit-btn');
-            const progContainer = document.getElementById('progress-container');
-            const progBar = document.getElementById('progress-bar');
-            const lockIcon = document.getElementById('lock-svg');
-            const outEl = document.getElementById('out');
-
-            lockIcon.style.display = "block";
-            lockIcon.classList.remove('failed', 'unlocked');
-            document.getElementById('goldhen-text').classList.remove('show');
-            
+            // تجهيز الواجهة وشريط التحميل
             btn.disabled = true;
+            lockSvg.classList.remove('failed');
+            progressBar.style.background = 'linear-gradient(90deg, #26e600, #39ff14)';
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '30%';
+            logMessage(`[SEARCH]: Looking for "${targetFile}"...`, 'warn');
+
+            try {
+                // البحث عن وجود الملف في نفس مجلد الموقع
+                const response = await fetch(targetFile, { method: 'HEAD' });
+                progressBar.style.width = '65%';
+
+                if (!response.ok) {
+                    throw new Error(`File "${targetFile}" not found (HTTP ${response.status})`);
+                }
+
